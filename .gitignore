@@ -71,3 +71,7 @@ Thumbs.db
 *.dll
 *.exe
 
+# build materials
+build-Simple-Desktop-Debug/
+build-Simple-Desktop-Release/
+build-Simple-Desktop-Profile/

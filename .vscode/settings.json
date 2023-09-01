@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "qmainwindow": "cpp"
+        "qmainwindow": "cpp",
+        "qapplication": "cpp",
+        "qdebug": "cpp",
+        "qkeyevent": "cpp",
+        "qstring": "cpp",
+        "random": "cpp",
+        "new": "cpp"
     }
 }

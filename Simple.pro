@@ -10,15 +10,19 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
-    window1.cpp
+    gui/mainwindow.cpp \
+    gui/input_window.cpp \
+    gui/cell.cpp \
+    gui/keyboard_window.cpp
 
 HEADERS += \
-    mainwindow.h \
-    window1.h
+    gui/mainwindow.h \
+    gui/input_window.h \
+    gui/cell.h \
+    gui/keyboard_window.h
 
-FORMS += \
-    mainwindow.ui
+#FORMS += \
+#    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
