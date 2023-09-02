@@ -5,17 +5,16 @@
 Cell::Cell(QWidget *parent)
     : QFrame(parent)
 {
-    setStyle(90, 90, 0);
-
     letterLabel = new QLabel("", this);
+    color = Color::gray;
+    setType(1);
+    
     QFont font = letterLabel->font();
     font.setFamily("Monospace");
     font.setBold(true);
     letterLabel->setFont(font);
-    setLetterStyle(32, 22, 30, 45, 45);
+
     letterLabel->show();
-    
-    color = Color::gray;
 }
 
 Cell::~Cell()
@@ -31,11 +30,6 @@ void Cell::setLetter(const QString &letter)
 QString Cell::getLetter() const
 {
     return letterLabel->text();
-}
-
-void Cell::setPos(int x, int y)
-{
-    move(x, y);
 }
 
 QString Cell::getGridColor() const
@@ -62,7 +56,6 @@ QString Cell::getGridColor() const
 
 QString Cell::getBorderColor() const
 {
-    if (type == 2) return "#ffffff";
     switch (color)
     {
     case Color::gray:
@@ -132,6 +125,31 @@ void Cell::changeColor()
 {
     setStyle(style.width, style.height, style.border_radius);
     setLetterStyle(letterStyle.pos_x, letterStyle.pos_y, letterStyle.width, letterStyle.height, letterStyle.font_size);
+}
+
+void Cell::setType(int type) // 1: input, 2: keyboard, 3: enter, 4: backspace
+{
+    this->type = type;
+    if (type == 1)
+    {
+        setStyle(90, 90, 0);
+        setLetterStyle(32, 22, 30, 45, 45);
+    }
+    else if (type == 2)
+    {
+        setStyle(64, 85, 8);
+        setLetterStyle(23, 22, 30, 45, 30);
+    }
+    else if (type == 3)
+    {
+        setStyle(99, 85, 8);
+        setLetterStyle(19, 22, 60, 45, 20);
+    }
+    else if (type == 4)
+    {
+        setStyle(99, 85, 8);
+        setLetterStyle(21, 23, 60, 45, 20);
+    }
 }
 
 void Cell::mousePressEvent(QMouseEvent *event)

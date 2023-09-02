@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QKeyEvent>
+#include <QGridLayout>
 #include "cell.h"
 
 class InputWindow : public QWidget
@@ -17,6 +18,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
 
 private:
+    QGridLayout *gridLayout;
     Cell *Cells[6][5];
 };
 

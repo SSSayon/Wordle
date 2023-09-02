@@ -75,3 +75,7 @@ Thumbs.db
 build-Simple-Desktop-Debug/
 build-Simple-Desktop-Release/
 build-Simple-Desktop-Profile/
+
+# test materials
+gui/tmp_button.*
+gui/tmp_keyboard_cell.*

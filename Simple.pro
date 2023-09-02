@@ -19,7 +19,8 @@ HEADERS += \
     gui/mainwindow.h \
     gui/input_window.h \
     gui/cell.h \
-    gui/keyboard_window.h
+    gui/keyboard_window.h \
+    core/hash.h
 
 #FORMS += \
 #    mainwindow.ui

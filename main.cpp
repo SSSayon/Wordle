@@ -1,18 +1,16 @@
 #include "gui/mainwindow.h"
 #include "gui/input_window.h"
 #include "gui/keyboard_window.h"
+#include "core/hash.h"
 #include <QApplication>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    // Window1 w1(&w);
-    // w1.show();
-    InputWindow w2(&w);
-    w2.show();
-    KeyboardWindow w3(&w);
-    w3.show();
+    WordValidator wordValidator;
+
     return a.exec();
 }

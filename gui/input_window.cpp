@@ -5,17 +5,21 @@ InputWindow::InputWindow(QWidget *parent)
     : QWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus);
-    setGeometry(300, 100, 600, 600);
+    // setGeometry(350, 100, 500, 600);
     setStyleSheet("background-color: #ffffff");
 
-    for (int row = 0; row < 6; ++row)
+    gridLayout = new QGridLayout(this);
+    for (int row = 0; row < 6; row++)
     {
-        for (int col = 0; col < 5; ++col)
+        for (int col = 0; col < 5; col++)
         {
             Cells[row][col] = new Cell(this);
-            Cells[row][col]->setPos(65 + col * 95, 10 + row * 100);
+            // Cells[row][col]->setStyle(90, 90, 0);
+            // Cells[row][col]->setLetterStyle(32, 22, 30, 45, 45);
+            gridLayout->addWidget(Cells[row][col], row, col);
         }
     }
+    setLayout(gridLayout);
 }
 
 InputWindow::~InputWindow()
@@ -32,7 +36,7 @@ InputWindow::~InputWindow()
 void InputWindow::keyPressEvent(QKeyEvent *event)
 {
     QString keyText = event->text();
-
+    
     if (keyText.length() == 1 && keyText.at(0).isLetter()) 
     {
         for (int row = 0; row < 6; ++row) {
