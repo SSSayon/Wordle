@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include "input_window.h"
 #include "keyboard_window.h"
+#include "../core/game.h"
 
 // QT_BEGIN_NAMESPACE
 // namespace Ui { class MainWindow; }
@@ -16,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, Game *game = nullptr);
     ~MainWindow();
 
 protected:
@@ -25,10 +26,11 @@ protected:
 private:
     // Ui::MainWindow *ui;
     // QVBoxLayout *mainLayout;
-    // Game game;
     QLabel *title;
     InputWindow *inputWindow;
     KeyboardWindow *keyboardWindow;
+            
+    Game *game;
 };
 
 #endif // MAINWINDOW_H

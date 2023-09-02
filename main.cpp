@@ -8,8 +8,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    Game *game = new Game();
+    MainWindow mainWindow(nullptr, game);
+    mainWindow.show();
     // game.gameStatus.ans_word = "craae";
     // game.gameStatus.cur_word = "aaaea";
     // game.cmpWord();

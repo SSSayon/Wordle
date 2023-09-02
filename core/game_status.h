@@ -7,12 +7,13 @@
 
 struct GameStatus
 {
-    QString ans_word = "crane";
+    QString ans_word = "piano";
     WordSet wordSet = WordSet();
     int cur_row = 0;
     int cur_col = 0;
     QString cur_word = "";
     Cell::Color cur_word_color[5];
+    Cell::Color prev_word_color[5];
     QStringList *guessed_words = new QStringList();
     Cell::Color letter_color[26];
     bool is_game_over = false;

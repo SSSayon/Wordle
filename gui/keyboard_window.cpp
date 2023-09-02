@@ -1,8 +1,9 @@
 #include "keyboard_window.h"
+#include "input_window.h"
 #include <QDebug>
 
-KeyboardWindow::KeyboardWindow(QWidget *parent)
-    : QWidget(parent)
+KeyboardWindow::KeyboardWindow(QWidget *parent, Game *game, InputWindow *inputWindow)
+    : QWidget(parent), game(game), inputWindow(inputWindow)
 {
     // setFocusPolicy(Qt::StrongFocus);
     // setGeometry(262, 715, 676, 280);
@@ -19,9 +20,14 @@ KeyboardWindow::~KeyboardWindow()
     delete enterCell;
 }
 
+void KeyboardWindow::setInputWindow(InputWindow *inputWindow)
+{
+    this->inputWindow = inputWindow;
+}
+
 void KeyboardWindow::onCellClicked(Cell *cell)
 {
-    qDebug() << cell->getLetter() << " clicked";
+    inputWindow->keyClickEvent(cell->getLetter());
 }
 
 void KeyboardWindow::initKeyboard()
@@ -62,4 +68,13 @@ void KeyboardWindow::initKeyboard()
     gridLayout->addWidget(backspaceCell, 2, 17, 1, 3);
 
     setLayout(gridLayout);
+}
+
+void KeyboardWindow::flushKeyboard()
+{
+    for (int i = 0; i < 26; i++)
+    {
+        Cells[i]->color = game->gameStatus.letter_color[KeyMap2[i]];
+        Cells[i]->changeColor();
+    }
 }

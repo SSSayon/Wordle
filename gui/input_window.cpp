@@ -1,8 +1,9 @@
 #include "input_window.h"
+#include "keyboard_window.h"
 #include <QDebug>
 
-InputWindow::InputWindow(QWidget *parent)
-    : QWidget(parent)
+InputWindow::InputWindow(QWidget *parent, Game *game, KeyboardWindow *keyboardWindow)
+    : QWidget(parent), game(game), keyboardWindow(keyboardWindow)
 {
     setFocusPolicy(Qt::StrongFocus);
     // setGeometry(350, 100, 500, 600);
@@ -33,58 +34,84 @@ InputWindow::~InputWindow()
     }
 }
 
+void InputWindow::setKeyboardWindow(KeyboardWindow *keyboardWindow)
+{
+    this->keyboardWindow = keyboardWindow;
+}
+
+void InputWindow::flushColor(int signal, int row, int col) // signal: 0: flush current row, 1: flush previous row
+{
+    if (signal == 0)
+        Cells[row][col]->color = game->gameStatus.cur_word_color[col];
+    else if (signal == 1)
+        Cells[row][col]->color = game->gameStatus.prev_word_color[col];
+    Cells[row][col]->changeColor();
+    return;
+}
+
 void InputWindow::keyPressEvent(QKeyEvent *event)
 {
     QString keyText = event->text();
-    
     if (keyText.length() == 1 && keyText.at(0).isLetter()) 
     {
-        for (int row = 0; row < 6; ++row) {
-            for (int col = 0; col < 5; ++col) {
-                if (Cells[row][col]->getLetter().isEmpty()) {
-                    Cells[row][col]->setLetter(keyText.toUpper());
-                    Cells[row][col]->color = Cell::Color::black;
-                    Cells[row][col]->changeColor();
-                    return;
-                }
-            }
+        int signal = game->handleKeyPress(keyText.toLower());
+        if (signal == 1)
+        {
+            Cells[game->gameStatus.cur_row][game->gameStatus.cur_col - 1]->setLetter(keyText.toUpper());
+            flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col - 1);
         }
-    } 
-    else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) 
-    {
-        int nowRow = -1, nowCol = -1;
-        for (int row = 0; row < 6; ++row) {
-            for (int col = 0; col < 5; ++col) {
-                if (!Cells[row][col]->getLetter().isEmpty()) {
-                    if (nowCol != -1)
-                    {
-                        Cells[nowRow][nowCol]->setLetter("A");
-                        Cells[nowRow][nowCol]->color = Cell::Color::green;
-                        Cells[nowRow][nowCol]->changeColor();
-                    }
-                    return;
-                }
-                nowRow = row;
-                nowCol = col;
-            }
-        }
-    } 
+    }
     else if (event->key() == Qt::Key_Backspace) 
     {
-        for (int row = 0; row < 6; ++row) {
-            for (int col = 0; col < 5; ++col) {
-                if (!Cells[row][col]->getLetter().isEmpty()) {
-                    Cells[row][col]->setLetter("");
-                    Cells[row][col]->color = Cell::Color::gray;
-                    Cells[row][col]->changeColor();
-                    return;
-                }
+        int signal = game->handleBackspace();
+        if (signal == 1)
+            {
+                Cells[game->gameStatus.cur_row][game->gameStatus.cur_col]->setLetter("");
+                flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col);
             }
+    }
+    else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) 
+    {
+        int signal = game->handleEnter();
+        if (signal == 2)
+        {
+            for (int i = 0; i < 5; i++)
+                flushColor(1, game->gameStatus.cur_row - 1, i);
+            keyboardWindow->flushKeyboard();
         }
-    } 
+    }
+    return;
+}
+
+void InputWindow::keyClickEvent(const QString & key)
+{
+    if (key == "BACK\nSPACE") 
+    {
+        int signal = game->handleBackspace();
+        if (signal == 1)
+            {
+                Cells[game->gameStatus.cur_row][game->gameStatus.cur_col]->setLetter("");
+                flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col);
+            }
+    }
+    else if (key == "ENTER") 
+    {
+        int signal = game->handleEnter();
+        if (signal == 2)
+        {
+            for (int i = 0; i < 5; i++)
+                flushColor(1, game->gameStatus.cur_row - 1, i);
+            keyboardWindow->flushKeyboard();
+        }
+    }
     else 
     {
-        return;
+        int signal = game->handleKeyPress(key.toLower());
+        if (signal == 1)
+        {
+            Cells[game->gameStatus.cur_row][game->gameStatus.cur_col - 1]->setLetter(key);
+            flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col - 1);
+        }
     }
     return;
 }

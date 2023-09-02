@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent, Game *game)
+    : QMainWindow(parent), game(game)
     // , ui(new Ui::MainWindow)
 {
     // ui->setupUi(this);
@@ -25,10 +25,11 @@ MainWindow::MainWindow(QWidget *parent)
     title->setFont(font);
     mainLayout->addWidget(title, 0, Qt::AlignCenter);
 
-    inputWindow = new InputWindow(centralWidget);
+    inputWindow = new InputWindow(centralWidget, game, nullptr);
+    keyboardWindow = new KeyboardWindow(centralWidget, game, nullptr);
+    inputWindow->setKeyboardWindow(keyboardWindow);
+    keyboardWindow->setInputWindow(inputWindow);
     mainLayout->addWidget(inputWindow, 0, Qt::AlignCenter);
-
-    keyboardWindow = new KeyboardWindow(centralWidget);
     mainLayout->addWidget(keyboardWindow, 0, Qt::AlignCenter);
 
     QSpacerItem* spacer2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -39,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     // delete ui;
+    delete title;
+    delete inputWindow;
+    delete keyboardWindow;
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
