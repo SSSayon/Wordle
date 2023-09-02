@@ -6,17 +6,16 @@
 #include <QFile>
 #include <QHash>
 #include <QDir>
-#include <QDebug>
 
-class WordValidator 
+class WordSet 
 {
 public:
-    WordValidator() 
+    WordSet() 
     {
         loadWords();
     }
 
-    bool isValidWord(const QString& word) const 
+    bool isValid(const QString& word) const 
     {
         return wordHash.contains(word);
     }
@@ -43,7 +42,6 @@ private:
             }
         }
         file.close();
-        qDebug() << wordHash.size();
     }
 };
 

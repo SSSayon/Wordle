@@ -13,14 +13,17 @@ SOURCES += \
     gui/mainwindow.cpp \
     gui/input_window.cpp \
     gui/cell.cpp \
-    gui/keyboard_window.cpp
+    gui/keyboard_window.cpp \
+    core/game.cpp \
 
 HEADERS += \
     gui/mainwindow.h \
     gui/input_window.h \
     gui/cell.h \
     gui/keyboard_window.h \
-    core/hash.h
+    core/hash.h \
+    core/game_status.h \
+    core/game.h \
 
 #FORMS += \
 #    mainwindow.ui

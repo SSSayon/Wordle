@@ -25,6 +25,7 @@ protected:
 private:
     // Ui::MainWindow *ui;
     // QVBoxLayout *mainLayout;
+    // Game game;
     QLabel *title;
     InputWindow *inputWindow;
     KeyboardWindow *keyboardWindow;
