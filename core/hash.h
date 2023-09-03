@@ -27,7 +27,8 @@ private:
 
     void loadWords()
     {
-        QString filePath = QDir::currentPath() + "/src/valid_word.txt";
+//        QString filePath = QDir::currentPath() + "/../src/valid_word.txt";
+        QString filePath = ":/valid_word.txt";
         QFile file(filePath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             error_code = 1;

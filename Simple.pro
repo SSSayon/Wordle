@@ -12,15 +12,15 @@ SOURCES += \
     main.cpp \
     gui/mainwindow.cpp \
     gui/input_window.cpp \
-    gui/cell.cpp \
     gui/keyboard_window.cpp \
+    gui/cell.cpp \
     core/game.cpp \
 
 HEADERS += \
     gui/mainwindow.h \
     gui/input_window.h \
-    gui/cell.h \
     gui/keyboard_window.h \
+    gui/cell.h \
     core/hash.h \
     core/game_status.h \
     core/game.h \
@@ -32,3 +32,6 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    src/valid_word.qrc
