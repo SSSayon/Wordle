@@ -1,7 +1,7 @@
 #include "game.h"
 #include <QDebug>
 
-void Game::cmpWord()
+void Game::_cmpWord()
 {
     QString cur_word = gameStatus.cur_word;
     QString ans_word = gameStatus.ans_word;
@@ -39,6 +39,20 @@ void Game::cmpWord()
         }
 }
 
+bool Game::_isValidWord(const QString &word)
+{
+    if (gameStatus.game_mode == 0)
+        return gameStatus.wordDataSet.validWordBucket[31].contains(word);
+    // TODO
+    return false;
+}
+
+QStringList Game::_getValidWords(const QString &word)
+{
+    // TODO
+    return QStringList();
+}
+
 int Game::handleKeyPress(const QString &keyText)
 {
     int signal = 0; // 0: do nothing, 1: add letter
@@ -72,10 +86,10 @@ int Game::handleEnter()
     if (gameStatus.cur_col < 5) return signal;
 
     signal = 1;
-    if (!gameStatus.wordSet.isValid(gameStatus.cur_word)) return signal;
+    if (!_isValidWord(gameStatus.cur_word)) return signal;
 
     signal = 2;
-    cmpWord();
+    _cmpWord();
     for (int i = 0; i < 5; i++) gameStatus.prev_word_color[i] = gameStatus.cur_word_color[i];
     if (gameStatus.cur_word == gameStatus.ans_word) 
     {
@@ -84,7 +98,7 @@ int Game::handleEnter()
     }
     if (gameStatus.cur_row == 5) 
         gameStatus.is_game_over = true;
-    gameStatus.guessed_words->append(gameStatus.cur_word);
+    gameStatus.guessed_words.append(gameStatus.cur_word);
     gameStatus.cur_row++;
     gameStatus.cur_col = 0;
     gameStatus.cur_word = "";

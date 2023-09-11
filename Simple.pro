@@ -15,15 +15,16 @@ SOURCES += \
     gui/keyboard_window.cpp \
     gui/cell.cpp \
     core/game.cpp \
+    core/load_data.cpp \
 
 HEADERS += \
     gui/mainwindow.h \
     gui/input_window.h \
     gui/keyboard_window.h \
     gui/cell.h \
-    core/hash.h \
     core/game_status.h \
     core/game.h \
+    core/load_data.h \
 
 #FORMS += \
 #    mainwindow.ui

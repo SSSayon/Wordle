@@ -15,7 +15,10 @@ public:
     int handleEnter();
     int handleBackspace();
 
-    void cmpWord();
+private:
+    void _cmpWord();
+    bool _isValidWord(const QString &word);
+    QStringList _getValidWords(const QString &word);
 };
 
 #endif // GAME_H
