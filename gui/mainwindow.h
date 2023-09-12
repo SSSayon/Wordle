@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include "input_window.h"
 #include "keyboard_window.h"
+#include "message_window.h"
 #include "../core/game.h"
 
 // QT_BEGIN_NAMESPACE
@@ -27,6 +28,7 @@ private:
     // Ui::MainWindow *ui;
     // QVBoxLayout *mainLayout;
     QLabel *title;
+    MessageWindow *messageWindow;
     InputWindow *inputWindow;
     KeyboardWindow *keyboardWindow;
             

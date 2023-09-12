@@ -1,9 +1,10 @@
 #include "input_window.h"
 #include "keyboard_window.h"
+#include "message_window.h"
 #include <QDebug>
 
-InputWindow::InputWindow(QWidget *parent, Game *game, KeyboardWindow *keyboardWindow)
-    : QWidget(parent), game(game), keyboardWindow(keyboardWindow)
+InputWindow::InputWindow(QWidget *parent, Game *game, KeyboardWindow *keyboardWindow, MessageWindow *messageWindow)
+    : QWidget(parent), game(game), keyboardWindow(keyboardWindow), messageWindow(messageWindow)
 {
     setFocusPolicy(Qt::StrongFocus);
     // setGeometry(350, 100, 500, 600);
@@ -38,8 +39,12 @@ void InputWindow::setKeyboardWindow(KeyboardWindow *keyboardWindow)
 {
     this->keyboardWindow = keyboardWindow;
 }
+void InputWindow::setMessageWindow(MessageWindow *messageWindow)
+{
+    this->messageWindow = messageWindow;
+}
 
-void InputWindow::flushColor(int signal, int row, int col) // signal: 0: flush current row, 1: flush previous row
+void InputWindow::_flushColor(int signal, int row, int col) // signal: 0: flush current row, 1: flush previous row
 {
     if (signal == 0)
         Cells[row][col]->color = game->gameStatus.cur_word_color[col];
@@ -49,36 +54,88 @@ void InputWindow::flushColor(int signal, int row, int col) // signal: 0: flush c
     return;
 }
 
-void InputWindow::keyPressEvent(QKeyEvent *event)
+void InputWindow::_handleKeyInput(int _signal, const QString & key)
 {
-    QString keyText = event->text();
-    if (keyText.length() == 1 && keyText.at(0).isLetter()) 
+    if (_signal == 1) // key input
     {
-        int signal = game->handleKeyPress(keyText.toLower());
+        int signal = game->handleKeyPress(key.toLower());
         if (signal == 1)
         {
-            Cells[game->gameStatus.cur_row][game->gameStatus.cur_col - 1]->setLetter(keyText.toUpper());
-            flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col - 1);
+            Cells[game->gameStatus.cur_row][game->gameStatus.cur_col - 1]->setLetter(key.toUpper());
+            _flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col - 1);
         }
     }
-    else if (event->key() == Qt::Key_Backspace) 
+    else if (_signal == 2) // backspace
     {
         int signal = game->handleBackspace();
         if (signal == 1)
             {
                 Cells[game->gameStatus.cur_row][game->gameStatus.cur_col]->setLetter("");
-                flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col);
+                _flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col);
             }
+    }
+    else // enter
+    {
+        if (game->gameStatus.wordDataSet.error_code == 1) return;
+        int signal = game->handleEnter(); // 0: do nothing, 1: word not valid, 2: word valid but hint unused, 3: word valid then enter
+        if (game->gameStatus.game_mode == 0)
+        {
+            if ((signal == 2) || (signal == 3))
+            {
+                for (int i = 0; i < 5; i++)
+                    _flushColor(1, game->gameStatus.cur_row - 1, i);
+                keyboardWindow->flushKeyboard();
+                messageWindow->setMessage("");
+            }
+            else
+            {
+                messageWindow->setMessage("Word not valid!");
+            }
+        }
+        else
+        {
+            if (signal == 3)
+            {
+                for (int i = 0; i < 5; i++)
+                    _flushColor(1, game->gameStatus.cur_row - 1, i);
+                keyboardWindow->flushKeyboard();
+                messageWindow->setMessage("");
+            }
+            else
+            {
+                if (signal == 1)
+                    messageWindow->setMessage("Word not valid!");
+                else
+                    messageWindow->setMessage("Previous hint(s) unused!");
+            }
+        }
+
+        if (game->gameStatus.is_game_over)
+        {
+            if (game->gameStatus.is_game_won)
+                messageWindow->setMessage("You win!");
+            else
+                messageWindow->setMessage("You lose! " + game->gameStatus.ans_word.toUpper());
+        }
+        qDebug() << game->_getValidWords();
+    }
+    return;
+}
+
+void InputWindow::keyPressEvent(QKeyEvent *event)
+{
+    QString keyText = event->text();
+    if (keyText.length() == 1 && keyText.at(0).isLetter()) 
+    {
+        _handleKeyInput(1, keyText);
+    }
+    else if (event->key() == Qt::Key_Backspace) 
+    {
+        _handleKeyInput(2, "");
     }
     else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) 
     {
-        int signal = game->handleEnter();
-        if (signal == 2)
-        {
-            for (int i = 0; i < 5; i++)
-                flushColor(1, game->gameStatus.cur_row - 1, i);
-            keyboardWindow->flushKeyboard();
-        }
+        _handleKeyInput(3, "");
     }
     return;
 }
@@ -87,31 +144,15 @@ void InputWindow::keyClickEvent(const QString & key)
 {
     if (key == "BACK\nSPACE") 
     {
-        int signal = game->handleBackspace();
-        if (signal == 1)
-            {
-                Cells[game->gameStatus.cur_row][game->gameStatus.cur_col]->setLetter("");
-                flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col);
-            }
+        _handleKeyInput(2, "");
     }
     else if (key == "ENTER") 
     {
-        int signal = game->handleEnter();
-        if (signal == 2)
-        {
-            for (int i = 0; i < 5; i++)
-                flushColor(1, game->gameStatus.cur_row - 1, i);
-            keyboardWindow->flushKeyboard();
-        }
+        _handleKeyInput(3, "");
     }
     else 
     {
-        int signal = game->handleKeyPress(key.toLower());
-        if (signal == 1)
-        {
-            Cells[game->gameStatus.cur_row][game->gameStatus.cur_col - 1]->setLetter(key);
-            flushColor(0, game->gameStatus.cur_row, game->gameStatus.cur_col - 1);
-        }
+        _handleKeyInput(1, key);
     }
     return;
 }

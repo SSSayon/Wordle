@@ -15,25 +15,30 @@ MainWindow::MainWindow(QWidget *parent, Game *game)
     QVBoxLayout* mainLayout = new QVBoxLayout(centralWidget);
 
     QSpacerItem* spacer1 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    mainLayout->addItem(spacer1);
-
-    title = new QLabel("Wordle", centralWidget);
+    QSpacerItem* spacer2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    
+    title = new QLabel("Wordle", centralWidget); // title bar
     QFont font = title->font();
     font.setFamily("Consolas");
     font.setPointSize(50);
     font.setBold(true);
     title->setFont(font);
-    mainLayout->addWidget(title, 0, Qt::AlignCenter);
-
-    inputWindow = new InputWindow(centralWidget, game, nullptr);
-    keyboardWindow = new KeyboardWindow(centralWidget, game, nullptr);
+    
+    inputWindow = new InputWindow(centralWidget, game, nullptr, nullptr); // input window
+    keyboardWindow = new KeyboardWindow(centralWidget, game, nullptr); // keyboard window
+    messageWindow = new MessageWindow(centralWidget, game, nullptr); // message window
     inputWindow->setKeyboardWindow(keyboardWindow);
+    inputWindow->setMessageWindow(messageWindow);
     keyboardWindow->setInputWindow(inputWindow);
-    mainLayout->addWidget(inputWindow, 0, Qt::AlignCenter);
-    mainLayout->addWidget(keyboardWindow, 0, Qt::AlignCenter);
+    messageWindow->setInputWindow(inputWindow);
 
-    QSpacerItem* spacer2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    mainLayout->addItem(spacer1);
+    mainLayout->addWidget(title, 0, Qt::AlignCenter);
+    mainLayout->addWidget(inputWindow, 0, Qt::AlignCenter);
+    mainLayout->addWidget(messageWindow, 0, Qt::AlignCenter);
+    mainLayout->addWidget(keyboardWindow, 0, Qt::AlignCenter);
     mainLayout->addItem(spacer2);
+
     centralWidget->setLayout(mainLayout);
 }
 
@@ -43,6 +48,7 @@ MainWindow::~MainWindow()
     delete title;
     delete inputWindow;
     delete keyboardWindow;
+    delete messageWindow;
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -50,7 +56,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     QMainWindow::resizeEvent(event);
 
     int minWidth = 1200;
-    int minHeight = 1000;
+    int minHeight = 1050;
     QSize currentSize = size();
     if (currentSize.width() < minWidth || currentSize.height() < minHeight)
     {

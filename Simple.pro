@@ -14,6 +14,7 @@ SOURCES += \
     gui/input_window.cpp \
     gui/keyboard_window.cpp \
     gui/cell.cpp \
+    gui/message_window.cpp \
     core/game.cpp \
     core/load_data.cpp \
 
@@ -22,6 +23,7 @@ HEADERS += \
     gui/input_window.h \
     gui/keyboard_window.h \
     gui/cell.h \
+    gui/message_window.h \
     core/game_status.h \
     core/game.h \
     core/load_data.h \

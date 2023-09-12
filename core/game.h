@@ -12,13 +12,15 @@ public:
     GameStatus gameStatus = GameStatus();
 
     int handleKeyPress(const QString &keyText);
-    int handleEnter();
+    int handleEnter(); // 0: do nothing, 1: word not valid, 2: word valid but hint unused, 3: word valid then enter
     int handleBackspace();
+
+    QStringList _getValidWords();
 
 private:
     void _cmpWord();
-    bool _isValidWord(const QString &word);
-    QStringList _getValidWords(const QString &word);
+    int _isValidWord(const QString &word); // 1: not valid, 2: valid but not use all hints, 3: valid
+    
 };
 
 #endif // GAME_H
