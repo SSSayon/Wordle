@@ -93,7 +93,7 @@ int Game::_isValidWord(const QString &word) // 1: not valid, 2: valid but not us
     return 3;
 }
 
-QStringList Game::_getValidWords()
+QStringList Game::getValidWords()
 {
     QString key = "";
     int n = 0;
@@ -209,10 +209,15 @@ int Game::handleEnter()
     }
     if (gameStatus.cur_row == 5) 
         gameStatus.is_game_over = true;
-    gameStatus.guessed_words.append(gameStatus.cur_word);
+    gameStatus.guessed_words.append(gameStatus.cur_word.toUpper());
     gameStatus.cur_row++;
     gameStatus.cur_col = 0;
     gameStatus.cur_word = "";
     for (int i = 0; i < 5; i++) gameStatus.cur_word_color[i] = Cell::Color::gray;
     return signal;
+}
+
+void Game::resetGame()
+{
+    gameStatus.resetGameStatus();
 }

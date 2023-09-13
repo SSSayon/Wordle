@@ -2,6 +2,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+QT += svg
+
 CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -15,6 +17,11 @@ SOURCES += \
     gui/keyboard_window.cpp \
     gui/cell.cpp \
     gui/message_window.cpp \
+    gui/options/restart_option.cpp \
+    gui/options/hint_option.cpp \
+    gui/options/difficulty_option.cpp \
+    gui/options/save_option.cpp \
+    gui/options/load_option.cpp \
     core/game.cpp \
     core/load_data.cpp \
 
@@ -24,6 +31,11 @@ HEADERS += \
     gui/keyboard_window.h \
     gui/cell.h \
     gui/message_window.h \
+    gui/options/restart_option.h \
+    gui/options/hint_option.h \
+    gui/options/difficulty_option.h \
+    gui/options/save_option.h \
+    gui/options/load_option.h \
     core/game_status.h \
     core/game.h \
     core/load_data.h \
@@ -37,4 +49,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    src/valid_word.qrc
+    src/resource.qrc

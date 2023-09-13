@@ -3,11 +3,15 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include <QVBoxLayout>
 #include "input_window.h"
 #include "keyboard_window.h"
 #include "message_window.h"
 #include "../core/game.h"
+#include "options/restart_option.h"
+#include "options/hint_option.h"
+#include "options/difficulty_option.h"
+#include "options/save_option.h"
+#include "options/load_option.h"
 
 // QT_BEGIN_NAMESPACE
 // namespace Ui { class MainWindow; }
@@ -23,6 +27,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent* event);
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     // Ui::MainWindow *ui;
@@ -33,6 +38,12 @@ private:
     KeyboardWindow *keyboardWindow;
             
     Game *game;
+
+    RestartOption *restartOption;
+    HintOption *hintOption;
+    DiffOption *diffOption;
+    SaveOption *saveOption;
+    LoadOption *loadOption;
 };
 
 #endif // MAINWINDOW_H

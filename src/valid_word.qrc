@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>valid_word.txt</file>
-        <file>valid_answer.txt</file>
-    </qresource>
-</RCC>

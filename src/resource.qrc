@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>valid_word.txt</file>
+        <file>valid_answer.txt</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>arrow-rotate-right-solid.svg</file>
+        <file>lightbulb-regular.svg</file>
+        <file>skull-solid.svg</file>
+        <file>face-smile-regular.svg</file>
+        <file>download-solid.svg</file>
+        <file>upload-solid.svg</file>
+    </qresource>
+</RCC>

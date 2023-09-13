@@ -1,5 +1,4 @@
 #include "cell.h"
-#include <QMouseEvent>
 #include <QDebug>
 
 Cell::Cell(QWidget *parent)

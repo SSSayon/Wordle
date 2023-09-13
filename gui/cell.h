@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QString>
+#include <QMouseEvent>
 
 class Cell : public QFrame
 {

@@ -15,7 +15,9 @@ public:
     int handleEnter(); // 0: do nothing, 1: word not valid, 2: word valid but hint unused, 3: word valid then enter
     int handleBackspace();
 
-    QStringList _getValidWords();
+    QStringList getValidWords();
+    void resetGame();
+    
 
 private:
     void _cmpWord();

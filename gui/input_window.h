@@ -10,6 +10,7 @@
 
 class KeyboardWindow;
 class MessageWindow;
+class RestartOption;
 
 class InputWindow : public QWidget
 {
@@ -24,6 +25,8 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
     void keyClickEvent(const QString & key);
+
+    void resetInputWindow();
 
 private:
     void _handleKeyInput(int _signal, const QString & key);

@@ -5,9 +5,35 @@
 KeyboardWindow::KeyboardWindow(QWidget *parent, Game *game, InputWindow *inputWindow)
     : QWidget(parent), game(game), inputWindow(inputWindow)
 {
-    // setFocusPolicy(Qt::StrongFocus);
-    // setGeometry(262, 715, 676, 280);
-    initKeyboard();
+    gridLayout = new QGridLayout(this);
+
+    for (int i = 0; i < 26; i++)
+    {
+        Cells[i] = new Cell(this);
+        Cells[i]->setType(2);
+        Cells[i]->setLetter(QString(keyMap[i]));
+        connect(Cells[i], SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
+
+        int row, column;
+        if (i < 10) { row = 0; column = i*2; } 
+        else if (i < 19) { row = 1; column = (i-10)*2+1; } 
+        else { row = 2; column = (i-19)*2+3; }
+        gridLayout->addWidget(Cells[i], row, column, 1, 2);
+    }
+    
+    enterCell = new Cell(this);
+    enterCell->setType(3);
+    enterCell->setLetter("ENTER");
+    connect(enterCell, SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
+    gridLayout->addWidget(enterCell, 2, 0, 1, 3);
+
+    backspaceCell = new Cell(this);
+    backspaceCell->setType(4);
+    backspaceCell->setLetter("BACK\nSPACE");
+    connect(backspaceCell, SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
+    gridLayout->addWidget(backspaceCell, 2, 17, 1, 3);
+
+    setLayout(gridLayout);
 }
 
 KeyboardWindow::~KeyboardWindow()
@@ -30,51 +56,20 @@ void KeyboardWindow::onCellClicked(Cell *cell)
     inputWindow->keyClickEvent(cell->getLetter());
 }
 
-void KeyboardWindow::initKeyboard()
-{
-    gridLayout = new QGridLayout(this);
-
-    for (int i = 0; i < 26; i++)
-    {
-        Cells[i] = new Cell(this);
-        Cells[i]->setType(2);
-        // Cells[i]->type = 2;
-        // Cells[i]->setStyle(64, 85, 8);
-        // Cells[i]->setLetterStyle(23, 22, 30, 45, 30);
-        Cells[i]->setLetter(QString(keyMap[i]));
-        connect(Cells[i], SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
-
-        int row, column;
-        if (i < 10) { row = 0; column = i*2; } 
-        else if (i < 19) { row = 1; column = (i-10)*2+1; } 
-        else { row = 2; column = (i-19)*2+3; }
-        gridLayout->addWidget(Cells[i], row, column, 1, 2);
-    }
-    enterCell = new Cell(this);
-    enterCell->setType(3);
-    // enterCell->type = 2;
-    // enterCell->setStyle(98, 85, 8);
-    // enterCell->setLetterStyle(19, 22, 60, 45, 20);
-    enterCell->setLetter("ENTER");
-    connect(enterCell, SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
-    gridLayout->addWidget(enterCell, 2, 0, 1, 3);
-    backspaceCell = new Cell(this);
-    backspaceCell->setType(4);
-    // backspaceCell->type = 2;
-    // backspaceCell->setStyle(98, 85, 8);
-    // backspaceCell->setLetterStyle(21, 23, 60, 45, 20);
-    backspaceCell->setLetter("BACK\nSPACE");
-    connect(backspaceCell, SIGNAL(cellClicked(Cell*)), this, SLOT(onCellClicked(Cell*)));
-    gridLayout->addWidget(backspaceCell, 2, 17, 1, 3);
-
-    setLayout(gridLayout);
-}
-
 void KeyboardWindow::flushKeyboard()
 {
     for (int i = 0; i < 26; i++)
     {
         Cells[i]->color = game->gameStatus.letter_color[KeyMap2[i]];
+        Cells[i]->changeColor();
+    }
+}
+
+void KeyboardWindow::resetKeyboard()
+{
+    for (int i = 0; i < 26; i++)
+    {
+        Cells[i]->color = Cell::Color::gray;
         Cells[i]->changeColor();
     }
 }

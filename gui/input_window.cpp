@@ -105,7 +105,7 @@ void InputWindow::_handleKeyInput(int _signal, const QString & key)
             {
                 if (signal == 1)
                     messageWindow->setMessage("Word not valid!");
-                else
+                else if (signal == 2)
                     messageWindow->setMessage("Previous hint(s) unused!");
             }
         }
@@ -115,9 +115,10 @@ void InputWindow::_handleKeyInput(int _signal, const QString & key)
             if (game->gameStatus.is_game_won)
                 messageWindow->setMessage("You win!");
             else
-                messageWindow->setMessage("You lose! " + game->gameStatus.ans_word.toUpper());
+                messageWindow->setMessage("You lose! The correct word is: " + game->gameStatus.ans_word.toUpper());
         }
-        qDebug() << game->_getValidWords();
+        // if (signal != 0)
+        //     qDebug() << game->getValidWords();
     }
     return;
 }
@@ -153,6 +154,20 @@ void InputWindow::keyClickEvent(const QString & key)
     else 
     {
         _handleKeyInput(1, key);
+    }
+    return;
+}
+
+void InputWindow::resetInputWindow()
+{
+    for (int row = 0; row < 6; row++)
+    {
+        for (int col = 0; col < 5; col++)
+        {
+            Cells[row][col]->setLetter("");
+            Cells[row][col]->color = Cell::Color::gray;
+            Cells[row][col]->changeColor();
+        }
     }
     return;
 }
