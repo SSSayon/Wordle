@@ -1,8 +1,8 @@
 #include "gui/mainwindow.h"
-#include "gui/input_window.h"
-#include "gui/keyboard_window.h"
+// #include "gui/input_window.h"
+// #include "gui/keyboard_window.h"
 #include "core/game.h"
-#include "core/load_data.h"
+// #include "core/load_data.h"
 #include <QApplication>
 #include <QDebug>
 
